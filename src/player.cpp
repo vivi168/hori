@@ -2,9 +2,9 @@
 
 Player::Player(Image s)
 {
-  x  = 0; y  = 0;
-  xv = 0; yv = YVEL;
-  jumping = false;
+  x  = 0; y = 0;
+  xv = 0.0; yv = 0.0;
+  onGround = 2;
   sprite = Rect(0,0,SPRITEW,SPRITEH);
   spritesheet = s;
 }
@@ -12,45 +12,48 @@ Player::Player(Image s)
 void Player::handleInput(SDL_Event &e)
 {
   if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
-  //Adjust the velocity
     switch (e.key.keysym.sym) {
-      case SDLK_LEFT: xv -= XVEL; break;
+      case SDLK_LEFT:  xv -= XVEL; break;
       case SDLK_RIGHT: xv += XVEL; break;
-      // case SDLK_UP:
-      //   if(!jumping) {
-      //     jumping = true;
-      //     yv = -2*YVEL;
-      //   }
-      //   break;
+      case SDLK_SPACE: jump();     break;
     }
   }
-  //If a key was released
   else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
-    //Adjust the velocity
     switch (e.key.keysym.sym) {
-      case SDLK_LEFT: xv += XVEL; break;
+      case SDLK_LEFT:  xv += XVEL; break;
       case SDLK_RIGHT: xv -= XVEL; break;
-      // case SDLK_UP : yv = YVEL; break;
     }
   }
 }
 
 void Player::move()
 {
-  int newx = x + xv;
-  int newy = y + yv;
+  x += xv;
+  y += yv;
 
-  if ((newx >= 0) && (newx + SPRITEW <= LEVEL_WIDTH))
-    x = newx;
+  // should also check if touches blocking tile
+  if ((x < 0) || (x + SPRITEW > LEVEL_WIDTH)) {
+    x -= xv;
+  }
 
+  // should also check if touches blocking tile
+  if (y + SPRITEH > LEVEL_HEIGHT) {
+    y = LEVEL_HEIGHT-SPRITEH;
+    yv = 0;
+    onGround = 0;
+  } else {
+    if (yv < YVEL)
+      yv += GRAVITY;
+  }
 
-  if ((newy >= 0) && (newy + SPRITEH <= LEVEL_HEIGHT))
-    y = newy;
+}
 
-  // if (y + SPRITEH == LEVEL_HEIGHT) {
-    jumping = false;
-  // }
-
+void Player::jump()
+{
+  if (onGround < NBJUMP) {
+    yv = -YVEL;
+    onGround += 1;
+  }
 }
 
 void Player::draw(SDL_Renderer *renderer)
