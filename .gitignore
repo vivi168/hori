@@ -1,0 +1,8 @@
+obj/
+win32/
+hori
+hori.exe
+*~
+*.swp
+*.log
+*.out
