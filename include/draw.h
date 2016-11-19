@@ -8,11 +8,11 @@
 
 #include "rect.h"
 
-const int SCREEN_WIDTH  = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH  = 512;
+const int SCREEN_HEIGHT = 448;
 
-const int LEVEL_WIDTH  = 1280;
-const int LEVEL_HEIGHT = 840;
+const int LEVEL_WIDTH  = 1296;
+const int LEVEL_HEIGHT = 794;
 
 const std::string TITLE = "hori";
 

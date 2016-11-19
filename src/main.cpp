@@ -9,20 +9,18 @@ int main()
   Image i;
   Image bg;
 
-  if (w.init() && i.init(w, "mario.png") && bg.init(w, "bg.png")) {
+  if (w.init() && i.init(w, "mario_a.png") && bg.init(w, "bg.png")) {
     SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
     Player p(i);
 
-    std::cout << p.sprite.tl.x;
-
     SDL_Event e;
-    int quit = 0;
-    while (!quit){
+    bool quit = false;
+    while (!quit) {
       //Event Polling
       while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
-          quit = 1;
+          quit = true;
         }
         p.handleInput(e);
       }
@@ -48,7 +46,7 @@ int main()
       }
 
       SDL_RenderClear(w.renderer);
-      bg.drawClip(w, Rect(0,0,1824,840), 0-camera.x, 0-camera.y);
+      bg.drawClip(w, Rect(0,0,1296,794), 0-camera.x, 0-camera.y);
       p.draw(w, camera.x, camera.y);
       SDL_RenderPresent(w.renderer);
 
