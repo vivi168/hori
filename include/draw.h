@@ -41,7 +41,7 @@ public:
   bool init(Window w, std::string path);
 
   void close();
-  void drawClip(SDL_Renderer *renderer, Rect r, int x, int y);
+  void drawClip(Window w, Rect r, int x, int y);
 };
 
 #endif

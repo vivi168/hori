@@ -56,14 +56,14 @@ void Player::jump()
   }
 }
 
-void Player::draw(SDL_Renderer *renderer)
+void Player::draw(Window w)
 {
-  spritesheet.drawClip(renderer, sprite, x, y);
+  spritesheet.drawClip(w, sprite, x, y);
 }
 
 // relative to camera x,y
-void Player::draw(SDL_Renderer *renderer, int cx, int cy)
+void Player::draw(Window w, int cx, int cy)
 {
-  spritesheet.drawClip(renderer, sprite, x-cx, y-cy);
+  spritesheet.drawClip(w, sprite, x-cx, y-cy);
 }
 

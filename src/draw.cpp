@@ -67,7 +67,7 @@ void Image::close()
   IMG_Quit();
 }
 
-void Image::drawClip(SDL_Renderer *renderer, Rect r, int x, int y)
+void Image::drawClip(Window w, Rect r, int x, int y)
 {
   SDL_Rect clip;
   SDL_Rect dest;
@@ -75,6 +75,6 @@ void Image::drawClip(SDL_Renderer *renderer, Rect r, int x, int y)
   clip = {r.tl.x, r.tl.y, r.width(), r.height()};
   dest  = {x, y, r.width(), r.height()};
 
-  SDL_RenderCopy(renderer, texture, &clip, &dest);
+  SDL_RenderCopy(w.renderer, texture, &clip, &dest);
 
 }

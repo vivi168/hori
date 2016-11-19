@@ -48,9 +48,11 @@ int main()
       }
 
       SDL_RenderClear(w.renderer);
-      bg.drawClip(w.renderer, Rect(0,0,1824,840), 0-camera.x, 0-camera.y);
-      p.draw(w.renderer, camera.x, camera.y);
+      bg.drawClip(w, Rect(0,0,1824,840), 0-camera.x, 0-camera.y);
+      p.draw(w, camera.x, camera.y);
       SDL_RenderPresent(w.renderer);
+
+      frame++;
     }
   }
 
