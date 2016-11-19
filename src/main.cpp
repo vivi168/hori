@@ -52,7 +52,7 @@ int main()
       p.draw(w, camera.x, camera.y);
       SDL_RenderPresent(w.renderer);
 
-      frame++;
+      w.nextFrame();
     }
   }
 

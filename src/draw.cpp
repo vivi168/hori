@@ -8,6 +8,7 @@ void log_sdl_error(std::string msg) {
 
 Window::Window()
 {
+  frame = 0;
   window = NULL;
   renderer = NULL;
 }
@@ -34,6 +35,14 @@ bool Window::init()
   }
 
   return success;
+}
+
+void Window::nextFrame()
+{
+  frame++;
+  if (frame > 2) {
+    frame = 0;
+  }
 }
 
 void Window::close()

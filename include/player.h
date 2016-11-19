@@ -18,13 +18,19 @@ public:
   int x, y;
   double xv, yv;
   int onGround;
+
+  int frame;
+  int dir;
+
   Image spritesheet;
   Rect sprite;
+  Rect sprites[10];
 
   Player(Image s);
   void handleInput(SDL_Event &e);
   void move();
   void jump();
+  void selectSprite(int frame);
   void draw(Window w);
   void draw(Window w, int cx, int cy);
 };

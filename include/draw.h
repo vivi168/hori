@@ -22,11 +22,13 @@ class Window
 {
 private:
 public:
+  int frame;
   SDL_Window *window;
   SDL_Renderer *renderer;
 
   Window();
   bool init();
+  void nextFrame();
 
   void close();
 };
