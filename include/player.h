@@ -23,7 +23,6 @@ public:
   int dir;
 
   Image spritesheet;
-  Rect sprite;
   Rect sprites[10];
 
   Player(Image s);

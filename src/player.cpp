@@ -9,6 +9,8 @@ Player::Player(Image s)
   frame = 4;
   dir = 0;
 
+  spritesheet = s;
+
   sprites[0] = Rect(SPRITEW*0,0,SPRITEW,SPRITEH);
   sprites[1] = Rect(SPRITEW*1,0,SPRITEW,SPRITEH);
   sprites[2] = Rect(SPRITEW*2,0,SPRITEW,SPRITEH);
@@ -19,10 +21,6 @@ Player::Player(Image s)
   sprites[7] = Rect(SPRITEW*7,0,SPRITEW,SPRITEH);
   sprites[8] = Rect(SPRITEW*8,0,SPRITEW,SPRITEH);
   sprites[9] = Rect(SPRITEW*9,0,SPRITEW,SPRITEH);
-
-  sprite = sprites[frame];
-
-  spritesheet = s;
 }
 
 void Player::handleInput(SDL_Event &e)
@@ -76,12 +74,12 @@ void Player::selectSprite(int wframe)
 {
   if (xv == 0) {
     frame = 4-dir;
-  } else if (xv < 0 and wframe == 2) {
+  } else if (xv < 0 and wframe == FRAME_REFRESH) {
     frame--;
     if(frame < 0 or frame > 3) {
-      frame = 3;
+      frame = 2;
     }
-  } else if(xv > 0 and wframe == 2) {
+  } else if(xv > 0 and wframe == FRAME_REFRESH) {
     frame++;
     if (frame > 7) {
       frame = 5;
@@ -90,19 +88,18 @@ void Player::selectSprite(int wframe)
   if (onGround > 0) {
     frame = 9-dir;
   }
-  sprite = sprites[frame];
 }
 
 void Player::draw(Window w)
 {
   selectSprite(w.frame);
-  spritesheet.drawClip(w, sprite, x, y);
+  spritesheet.drawClip(w, sprites[frame], x, y);
 }
 
 // relative to camera x,y
 void Player::draw(Window w, int cx, int cy)
 {
   selectSprite(w.frame);
-  spritesheet.drawClip(w, sprite, x-cx, y-cy);
+  spritesheet.drawClip(w, sprites[frame], x-cx, y-cy);
 }
 

@@ -40,7 +40,7 @@ bool Window::init()
 void Window::nextFrame()
 {
   frame++;
-  if (frame > 2) {
+  if (frame > FRAME_REFRESH) {
     frame = 0;
   }
 }
