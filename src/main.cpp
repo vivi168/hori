@@ -3,7 +3,7 @@
 #include "draw.h"
 #include "player.h"
 
-int main()
+int main(int argc, char **argv)
 {
   Window w;
   Image i;
