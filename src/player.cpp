@@ -34,19 +34,11 @@ void Player::handleInput(SDL_Event &e)
     switch (e.key.keysym.sym) {
       case SDLK_LEFT:
         xv -= XVEL;
-        if (xv < 0) {
-          going_right = false;
-          changed_direction = true;
-          direction = -1;
-        }
+        setDirection();
         break;
       case SDLK_RIGHT:
         xv += XVEL;
-        if (xv > 0) {
-          going_right = true;
-          changed_direction = true;
-          direction = 1;
-        }
+        setDirection();
         break;
       case SDLK_SPACE:
         jump();
@@ -57,9 +49,11 @@ void Player::handleInput(SDL_Event &e)
     switch (e.key.keysym.sym) {
       case SDLK_LEFT:
         xv += XVEL;
+        setDirection();
         break;
       case SDLK_RIGHT:
         xv -= XVEL;
+        setDirection();
         break;
     }
   }
@@ -91,6 +85,18 @@ void Player::jump()
   if (onGround < NBJUMP) {
     yv = -YVEL;
     onGround += 1;
+  }
+}
+
+void Player::setDirection() {
+  changed_direction = true;
+  if (xv > 0) {
+    going_right = true;
+    direction = 1;
+  }
+  if (xv < 0) {
+    going_right = false;
+    direction = -1;
   }
 }
 

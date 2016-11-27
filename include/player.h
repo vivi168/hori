@@ -30,6 +30,8 @@ private:
   int onGround;
 
   double xv, yv;
+
+  void setDirection();
 public:
   int x, y;
 
@@ -37,6 +39,7 @@ public:
   void handleInput(SDL_Event &e);
   void move();
   void jump();
+
   void selectSprite();
   void draw(Window w);
   void draw(Window w, int cx, int cy);
