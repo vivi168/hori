@@ -34,15 +34,19 @@ void Player::handleInput(SDL_Event &e)
     switch (e.key.keysym.sym) {
       case SDLK_LEFT:
         xv -= XVEL;
-        going_right = false;
-        changed_direction = true;
-        direction = -1;
+        if (xv < 0) {
+          going_right = false;
+          changed_direction = true;
+          direction = -1;
+        }
         break;
       case SDLK_RIGHT:
         xv += XVEL;
-        going_right = true;
-        changed_direction = true;
-        direction = 1;
+        if (xv > 0) {
+          going_right = true;
+          changed_direction = true;
+          direction = 1;
+        }
         break;
       case SDLK_SPACE:
         jump();
@@ -109,31 +113,26 @@ void Player::selectSprite()
 
   if (xv == 0) {
     frame = idle_frame;
-  } else if (xv < 0) {
+  } else {
     if (animate or changed_direction) {
       if (changed_direction) {
-        frame = idle_frame - 1;
+        frame = idle_frame + direction;
         changed_direction = false;
       } else {
-        frame --;
+        frame += direction;
       }
     }
-    if(frame < 0 or frame > 3) {
-      frame = 2;
-    }
-  } else if(xv > 0) {
-    if (animate or changed_direction) {
-      if (changed_direction) {
-        frame = idle_frame + 1;
-        changed_direction = false;
-      } else {
-        frame ++;
+    if (going_right) {
+      if (frame > 7) {
+        frame = 5;
       }
-    }
-    if (frame > 7) {
-      frame = 5;
+    } else {
+      if(frame < 0 or frame > 3) {
+        frame = 2;
+      }
     }
   }
+
   if (onGround > 0) {
     frame = jump_frame;
   }
