@@ -107,22 +107,33 @@ void Player::selectSprite()
     jump_frame = 8;
   }
 
-  if (xv != 0) {
+  if (xv == 0) {
+    frame = idle_frame;
+  } else if (xv < 0) {
     if (animate or changed_direction) {
       if (changed_direction) {
-        frame = idle_frame + direction;
+        frame = idle_frame - 1;
         changed_direction = false;
       } else {
-        frame += direction;
+        frame --;
       }
     }
-    if (frame < 0 or frame > 7) {
-      frame = idle_frame + direction;
+    if(frame < 0 or frame > 3) {
+      frame = 2;
     }
-  } else {
-    frame = idle_frame;
+  } else if(xv > 0) {
+    if (animate or changed_direction) {
+      if (changed_direction) {
+        frame = idle_frame + 1;
+        changed_direction = false;
+      } else {
+        frame ++;
+      }
+    }
+    if (frame > 7) {
+      frame = 5;
+    }
   }
-
   if (onGround > 0) {
     frame = jump_frame;
   }

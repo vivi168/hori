@@ -16,11 +16,6 @@ const Uint32 ANIMATION_SPEED = 100;
 class Player
 {
 private:
-public:
-  int x, y;
-  double xv, yv;
-  int onGround;
-
   int frame;
   int direction;
   bool changed_direction;
@@ -31,6 +26,12 @@ public:
 
   Image spritesheet;
   Rect sprites[10];
+
+  int onGround;
+
+  double xv, yv;
+public:
+  int x, y;
 
   Player(Image s);
   void handleInput(SDL_Event &e);
