@@ -14,8 +14,6 @@ const int SCREEN_HEIGHT = 448;
 const int LEVEL_WIDTH  = 1296;
 const int LEVEL_HEIGHT = 794;
 
-const int FRAME_REFRESH = 4;
-
 const std::string TITLE = "hori";
 
 void log_sdl_error(std::string msg);
@@ -24,13 +22,11 @@ class Window
 {
 private:
 public:
-  int frame;
   SDL_Window *window;
   SDL_Renderer *renderer;
 
   Window();
   bool init();
-  void nextFrame();
 
   void close();
 };

@@ -17,7 +17,6 @@ int main()
     SDL_Event e;
     bool quit = false;
     while (!quit) {
-      //Event Polling
       while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
           quit = true;
@@ -32,10 +31,9 @@ int main()
 
       SDL_RenderClear(w.renderer);
       bg.drawClip(w, Rect(0,0,1296,794), 0-camera.x(), 0-camera.y());
+      p.selectSprite();
       p.draw(w, camera.x(), camera.y());
       SDL_RenderPresent(w.renderer);
-
-      w.nextFrame();
     }
   }
 

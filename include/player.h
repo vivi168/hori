@@ -11,6 +11,8 @@ const double XVEL = 4.0;
 const double YVEL = 8.0;
 const double GRAVITY = 0.5;
 
+const Uint32 ANIMATION_SPEED = 100;
+
 class Player
 {
 private:
@@ -20,7 +22,12 @@ public:
   int onGround;
 
   int frame;
-  int dir;
+  int direction;
+  bool changed_direction;
+  bool going_right;
+
+  Uint32 next_animation;
+  Uint32 last_animation;
 
   Image spritesheet;
   Rect sprites[10];
@@ -29,7 +36,7 @@ public:
   void handleInput(SDL_Event &e);
   void move();
   void jump();
-  void selectSprite(int frame);
+  void selectSprite();
   void draw(Window w);
   void draw(Window w, int cx, int cy);
 };

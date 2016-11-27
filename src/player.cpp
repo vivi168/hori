@@ -1,13 +1,18 @@
 #include "player.h"
-
+#include <iostream>
 Player::Player(Image s)
 {
   x  = 0; y = 0;
   xv = 0.0; yv = 0.0;
   onGround = 2;
 
-  frame = 4;
-  dir = 0;
+  frame = 0;
+  next_animation = 0;
+  last_animation = 0;
+
+  direction = 1;
+  changed_direction = false;
+  going_right = true;
 
   spritesheet = s;
 
@@ -27,15 +32,31 @@ void Player::handleInput(SDL_Event &e)
 {
   if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
     switch (e.key.keysym.sym) {
-      case SDLK_LEFT:  xv -= XVEL; dir=1; break;
-      case SDLK_RIGHT: xv += XVEL; dir=0; break;
-      case SDLK_SPACE: jump();     break;
+      case SDLK_LEFT:
+        xv -= XVEL;
+        going_right = false;
+        changed_direction = true;
+        direction = -1;
+        break;
+      case SDLK_RIGHT:
+        xv += XVEL;
+        going_right = true;
+        changed_direction = true;
+        direction = 1;
+        break;
+      case SDLK_SPACE:
+        jump();
+        break;
     }
   }
   else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
     switch (e.key.keysym.sym) {
-      case SDLK_LEFT:  xv += XVEL; break;
-      case SDLK_RIGHT: xv -= XVEL; break;
+      case SDLK_LEFT:
+        xv += XVEL;
+        break;
+      case SDLK_RIGHT:
+        xv -= XVEL;
+        break;
     }
   }
 }
@@ -59,7 +80,6 @@ void Player::move()
     if (yv < YVEL)
       yv += GRAVITY;
   }
-
 }
 
 void Player::jump()
@@ -70,36 +90,53 @@ void Player::jump()
   }
 }
 
-void Player::selectSprite(int wframe)
+void Player::selectSprite()
 {
-  if (xv == 0) {
-    frame = 4-dir;
-  } else if (xv < 0 and wframe == FRAME_REFRESH) {
-    frame--;
-    if(frame < 0 or frame > 3) {
-      frame = 2;
-    }
-  } else if(xv > 0 and wframe == FRAME_REFRESH) {
-    frame++;
-    if (frame > 7) {
-      frame = 5;
-    }
+  bool animate = false;
+  next_animation = SDL_GetTicks();
+  if (next_animation - last_animation > ANIMATION_SPEED) {
+    last_animation = next_animation;
+    animate = true;
   }
+
+  int idle_frame = 4;
+  int jump_frame = 9;
+
+  if (!going_right) {
+    idle_frame = 3;
+    jump_frame = 8;
+  }
+
+  if (xv != 0) {
+    if (animate or changed_direction) {
+      if (changed_direction) {
+        frame = idle_frame + direction;
+        changed_direction = false;
+      } else {
+        frame += direction;
+      }
+    }
+    if (frame < 0 or frame > 7) {
+      frame = idle_frame + direction;
+    }
+  } else {
+    frame = idle_frame;
+  }
+
   if (onGround > 0) {
-    frame = 9-dir;
+    frame = jump_frame;
   }
+
 }
 
 void Player::draw(Window w)
 {
-  selectSprite(w.frame);
   spritesheet.drawClip(w, sprites[frame], x, y);
 }
 
 // relative to camera x,y
 void Player::draw(Window w, int cx, int cy)
 {
-  selectSprite(w.frame);
   spritesheet.drawClip(w, sprites[frame], x-cx, y-cy);
 }
 
