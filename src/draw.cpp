@@ -81,9 +81,43 @@ void Image::drawClip(Window w, Rect r, int x, int y)
   SDL_Rect clip;
   SDL_Rect dest;
 
-  clip = {r.tl.x, r.tl.y, r.width(), r.height()};
+  clip = r.sdlrect();
   dest  = {x, y, r.width(), r.height()};
 
   SDL_RenderCopy(w.renderer, texture, &clip, &dest);
+}
 
+Camera::Camera()
+{
+  camera = Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+}
+
+int Camera::x() { return camera.x(); }
+int Camera::y() { return camera.y(); }
+
+void Camera::center(int x, int y, int w, int h)
+{
+  camera.setx((x + w / 2) - SCREEN_WIDTH / 2);
+  camera.sety((y + h / 2) - SCREEN_HEIGHT / 2);
+}
+
+void Camera::keepinbound()
+{
+  if (camera.x() < 0) {
+    camera.setx(0);
+  }
+  if (camera.y() < 0) {
+    camera.sety(0);
+  }
+  if (camera.x() > LEVEL_WIDTH - camera.width()) {
+    camera.setx(LEVEL_WIDTH - camera.width());
+  }
+  if (camera.y() > LEVEL_HEIGHT - camera.height()) {
+    camera.sety(LEVEL_HEIGHT - camera.height());
+  }
+
+}
+
+bool Camera::intersects(Rect r) {
+  return camera.intersects(r);
 }

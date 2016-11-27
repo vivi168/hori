@@ -48,4 +48,18 @@ public:
   void drawClip(Window w, Rect r, int x, int y);
 };
 
+class Camera
+{
+private:
+  Rect camera;
+public:
+  int x();
+  int y();
+
+  Camera();
+  void center(int x, int y, int w, int h);
+  void keepinbound();
+  bool intersects(Rect r);
+};
+
 #endif

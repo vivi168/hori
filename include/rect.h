@@ -1,28 +1,24 @@
 #ifndef RECT_H_
 #define RECT_H_
 
-class Point
-{
-private:
-public:
-  int x,y;
-
-  Point();
-  Point(int i, int j);
-};
+#include <SDL2/SDL.h>
 
 class Rect
 {
 private:
+  SDL_Rect rect;
 public:
-  Point tl,br;
-
   Rect();
   Rect(int x, int y, int w, int h);
 
-  int width() const;
-  int height() const;
+  int x();
+  int y();
+  void setx(int i);
+  void sety(int i);
+  int width();
+  int height();
   bool intersects(Rect r);
+  SDL_Rect sdlrect();
 };
 
 #endif
