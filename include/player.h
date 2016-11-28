@@ -1,6 +1,10 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+#include <vector>
+#include <string>
+#include <map>
+
 #include "draw.h"
 
 const int SPRITEW = 32;
@@ -16,22 +20,25 @@ const Uint32 ANIMATION_SPEED = 100;
 class Player
 {
 private:
-  int frame;
-  int direction;
   bool changed_direction;
-  bool going_right;
+  std::string direction;
 
   Uint32 next_animation;
   Uint32 last_animation;
 
   Image spritesheet;
-  Rect sprites[10];
+
+  std::map<std::string, std::map<std::string, std::vector<Rect>>> spritelist;
+  Rect current_sprite;
+  int frame;
 
   int onGround;
 
   double xv, yv;
 
   void setDirection();
+  void initSprites();
+  int nextFrame();
 public:
   int x, y;
 
