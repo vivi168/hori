@@ -126,9 +126,13 @@ void Player::jump()
 
 Rect Player::nextSprite()
 {
-  frame ++;
-  if (frame >= sprites[direction][current_state].size())
-      frame = 0;
+  if (previous_state != current_state)
+    frame = 0;
+  else {
+    frame ++;
+    if (frame >= sprites[direction][current_state].size())
+        frame = 0;
+  }
 
   return sprites[direction][current_state][frame];
 }
