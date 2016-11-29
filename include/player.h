@@ -21,22 +21,24 @@ class Player
 {
 private:
   enum State {
-    moving, jumping, idle
+    running, jumping, idle
+  };
+  enum Direction {
+    left, right
   };
 
   State current_state;
   State previous_state;
 
-  bool changed_direction;
-  std::string direction;
+  Direction direction;
 
   Uint32 next_animation;
   Uint32 last_animation;
 
   Image spritesheet;
 
-  std::map<std::string, std::map<std::string, std::vector<Rect>>> spritelist;
-  Rect current_sprite;
+  std::map<Direction, std::map<State, std::vector<Rect>>> sprites;
+  Rect sprite;
   int frame;
 
   int onGround;
@@ -50,7 +52,7 @@ private:
 
   void move();
   void jump();
-  Rect nextSprite(std::string action);
+  Rect nextSprite();
 public:
   int x, y;
 

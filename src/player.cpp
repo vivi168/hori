@@ -11,37 +11,39 @@ Player::Player(Image s)
   last_animation = 0;
 
   frame = 0;
-  changed_direction = false;
-  direction = "right";
+  current_state = idle;
+  previous_state = current_state;
+  direction = right;
 
   spritesheet = s;
+
 
   initSprites();
 }
 
 void Player::initSprites()
 {
-  spritelist["left"]["idle"] = {
+  sprites[left][idle] = {
     Rect(SPRITEW*3,0,SPRITEW,SPRITEH)
   };
-  spritelist["left"]["running"] = {
+  sprites[left][running] = {
     Rect(SPRITEW*0,0,SPRITEW,SPRITEH),
     Rect(SPRITEW*1,0,SPRITEW,SPRITEH),
     Rect(SPRITEW*2,0,SPRITEW,SPRITEH)
   };
-  spritelist["left"]["jumping"] = {
+  sprites[left][jumping] = {
     Rect(SPRITEW*8,0,SPRITEW,SPRITEH)
   };
 
-  spritelist["right"]["idle"] = {
+  sprites[right][idle] = {
     Rect(SPRITEW*4,0,SPRITEW,SPRITEH)
   };
-  spritelist["right"]["running"] = {
+  sprites[right][running] = {
     Rect(SPRITEW*5,0,SPRITEW,SPRITEH),
     Rect(SPRITEW*6,0,SPRITEW,SPRITEH),
     Rect(SPRITEW*7,0,SPRITEW,SPRITEH)
   };
-  spritelist["right"]["jumping"] = {
+  sprites[right][jumping] = {
     Rect(SPRITEW*9,0,SPRITEW,SPRITEH)
   };
 }
@@ -52,11 +54,9 @@ void Player::handleInput(SDL_Event &e)
     switch (e.key.keysym.sym) {
       case SDLK_LEFT:
         xv -= XVEL;
-        setDirection();
         break;
       case SDLK_RIGHT:
         xv += XVEL;
-        setDirection();
         break;
       case SDLK_SPACE:
         jump();
@@ -67,21 +67,12 @@ void Player::handleInput(SDL_Event &e)
     switch (e.key.keysym.sym) {
       case SDLK_LEFT:
         xv += XVEL;
-        setDirection();
         break;
       case SDLK_RIGHT:
         xv -= XVEL;
-        setDirection();
         break;
     }
   }
-}
-
-void Player::update()
-{
-  move();
-  setState();
-  selectSprite();
 }
 
 void Player::setState()
@@ -90,18 +81,17 @@ void Player::setState()
   if (xv == 0)
     current_state = idle;
   if (xv < 0 or xv > 0)
-    current_state = moving;
+    current_state = running;
   if(onGround > 0)
     current_state = jumping;
 }
 
 void Player::setDirection() {
-  changed_direction = true;
   if (xv > 0) {
-    direction = "right";
+    direction = right;
   }
   if (xv < 0) {
-    direction = "left";
+    direction = left;
   }
 }
 
@@ -134,51 +124,44 @@ void Player::jump()
   }
 }
 
-Rect Player::nextSprite(std::string action)
+Rect Player::nextSprite()
 {
-  if (changed_direction) {
-    frame = 0;
-    changed_direction = false;
-  } else {
-    frame ++;
-    if (frame >= spritelist[direction][action].size())
+  frame ++;
+  if (frame >= sprites[direction][current_state].size())
       frame = 0;
-  }
-  return spritelist[direction][action][frame];
+
+  return sprites[direction][current_state][frame];
 }
 
 void Player::selectSprite()
 {
-  bool animate = false;
   next_animation = SDL_GetTicks();
-  if (next_animation - last_animation > ANIMATION_SPEED or changed_direction) {
+  if (next_animation - last_animation > ANIMATION_SPEED or
+      previous_state != current_state) {
+
     last_animation = next_animation;
-    animate = true;
-  }
 
-  if (xv == 0) {
-    current_sprite = spritelist[direction]["idle"][0];
+    sprite = nextSprite();
   }
+}
 
-  if (xv < 0 or xv > 0) {
-    if (animate) {
-      current_sprite = nextSprite("running");
-    }
-  }
+void Player::update()
+{
+  setState();
+  setDirection();
+  selectSprite();
 
-  if (onGround > 0) {
-    current_sprite = spritelist[direction]["jumping"][0];
-  }
+  move();
 }
 
 void Player::draw(Window w)
 {
-  spritesheet.drawClip(w, current_sprite, x, y);
+  spritesheet.drawClip(w, sprite, x, y);
 }
 
 // relative to camera x,y
 void Player::draw(Window w, int cx, int cy)
 {
-  spritesheet.drawClip(w, current_sprite, x-cx, y-cy);
+  spritesheet.drawClip(w, sprite, x-cx, y-cy);
 }
 
