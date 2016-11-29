@@ -20,6 +20,13 @@ const Uint32 ANIMATION_SPEED = 100;
 class Player
 {
 private:
+  enum State {
+    moving, jumping, idle
+  };
+
+  State current_state;
+  State previous_state;
+
   bool changed_direction;
   std::string direction;
 
@@ -36,18 +43,22 @@ private:
 
   double xv, yv;
 
+  void setState();
   void setDirection();
   void initSprites();
-  int nextFrame();
+  void selectSprite();
+
+  void move();
+  void jump();
+  Rect nextSprite(std::string action);
 public:
   int x, y;
 
   Player(Image s);
   void handleInput(SDL_Event &e);
-  void move();
-  void jump();
 
-  void selectSprite();
+  void update();
+
   void draw(Window w);
   void draw(Window w, int cx, int cy);
 };

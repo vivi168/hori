@@ -24,14 +24,13 @@ int main(int argc, char **argv)
         p.handleInput(e);
       }
 
-      p.move();
+      p.update();
 
       camera.center(p.x, p.y, SPRITEW, SPRITEH);
       camera.keepinbound();
 
       SDL_RenderClear(w.renderer);
       bg.drawClip(w, Rect(0,0,1296,794), 0-camera.x(), 0-camera.y());
-      p.selectSprite();
       p.draw(w, camera.x(), camera.y());
       SDL_RenderPresent(w.renderer);
     }

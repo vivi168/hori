@@ -77,6 +77,34 @@ void Player::handleInput(SDL_Event &e)
   }
 }
 
+void Player::update()
+{
+  move();
+  setState();
+  selectSprite();
+}
+
+void Player::setState()
+{
+  previous_state = current_state;
+  if (xv == 0)
+    current_state = idle;
+  if (xv < 0 or xv > 0)
+    current_state = moving;
+  if(onGround > 0)
+    current_state = jumping;
+}
+
+void Player::setDirection() {
+  changed_direction = true;
+  if (xv > 0) {
+    direction = "right";
+  }
+  if (xv < 0) {
+    direction = "left";
+  }
+}
+
 void Player::move()
 {
   x += xv;
@@ -106,52 +134,41 @@ void Player::jump()
   }
 }
 
-void Player::setDirection() {
-  changed_direction = true;
-  frame = 0;
-  if (xv > 0) {
-    direction = "right";
-  }
-  if (xv < 0) {
-    direction = "left";
-  }
-}
-
-int Player::nextFrame()
+Rect Player::nextSprite(std::string action)
 {
-  frame ++;
-  if (frame >= spritelist[direction]["running"].size())
+  if (changed_direction) {
     frame = 0;
-
-  return frame;
+    changed_direction = false;
+  } else {
+    frame ++;
+    if (frame >= spritelist[direction][action].size())
+      frame = 0;
+  }
+  return spritelist[direction][action][frame];
 }
 
 void Player::selectSprite()
 {
   bool animate = false;
   next_animation = SDL_GetTicks();
-  if (next_animation - last_animation > ANIMATION_SPEED) {
+  if (next_animation - last_animation > ANIMATION_SPEED or changed_direction) {
     last_animation = next_animation;
     animate = true;
   }
 
   if (xv == 0) {
     current_sprite = spritelist[direction]["idle"][0];
-  } else {
-    if (animate or changed_direction) {
-      if (changed_direction) {;
-        changed_direction = false;
-        current_sprite = spritelist[direction]["running"][frame];
-      } else {
-        current_sprite = spritelist[direction]["running"][nextFrame()];
-      }
+  }
+
+  if (xv < 0 or xv > 0) {
+    if (animate) {
+      current_sprite = nextSprite("running");
     }
   }
 
   if (onGround > 0) {
     current_sprite = spritelist[direction]["jumping"][0];
   }
-
 }
 
 void Player::draw(Window w)
