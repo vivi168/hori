@@ -9,7 +9,7 @@ int main(int argc, char **argv)
   Image i;
   Image bg;
 
-  if (w.init() && i.init(w, "mario_a.png") && bg.init(w, "bg.png")) {
+  if (w.init() && i.init(w, "mario.png") && bg.init(w, "bg.png")) {
     Camera camera;
 
     Player p(i);
