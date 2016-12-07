@@ -125,6 +125,7 @@ void Player::jump()
   if (onGround < NBJUMP) {
     yv = -YVEL;
     onGround += 1;
+    jv = 0;
     if (keypressed[SDLK_LEFT])
       jv = -XVEL;
     else if (keypressed[SDLK_RIGHT])
