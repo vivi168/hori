@@ -4,19 +4,17 @@
 Player::Player(Image s)
 {
   x  = 0; y = 0;
-  xv = 0.0; yv = 0.0;
+  xv = 0.0; yv = 0.0; jv = 0.0;
   onGround = 2;
 
   next_animation = 0;
   last_animation = 0;
-
   frame = 0;
   current_state = idle;
   previous_state = current_state;
   direction = right;
 
   spritesheet = s;
-
 
   initSprites();
 }
@@ -62,6 +60,7 @@ void Player::handleInput(SDL_Event &e)
         jump();
         break;
     }
+    keypressed[e.key.keysym.sym] = true;
   }
   else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
     switch (e.key.keysym.sym) {
@@ -72,6 +71,7 @@ void Player::handleInput(SDL_Event &e)
         xv -= XVEL;
         break;
     }
+    keypressed[e.key.keysym.sym] = false;
   }
 }
 
@@ -97,7 +97,10 @@ void Player::setDirection() {
 
 void Player::move()
 {
-  x += xv;
+  if (current_state == jumping)
+    x += jv;
+  else
+    x += xv;
   y += yv;
 
   // should also check if touches blocking tile
@@ -110,6 +113,7 @@ void Player::move()
     y = LEVEL_HEIGHT-SPRITEH;
     yv = 0;
     onGround = 0;
+    jv = 0;
   } else {
     if (yv < YVEL)
       yv += GRAVITY;
@@ -121,6 +125,10 @@ void Player::jump()
   if (onGround < NBJUMP) {
     yv = -YVEL;
     onGround += 1;
+    if (keypressed[SDLK_LEFT])
+      jv = -XVEL;
+    else if (keypressed[SDLK_RIGHT])
+      jv = XVEL;
   }
 }
 

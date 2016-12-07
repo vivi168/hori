@@ -36,14 +36,14 @@ private:
   Uint32 last_animation;
 
   Image spritesheet;
-
+  std::map<int, bool> keypressed;
   std::map<Direction, std::map<State, std::vector<Rect>>> sprites;
   Rect sprite;
   int frame;
 
   int onGround;
 
-  double xv, yv;
+  double xv, yv, jv;
 
   void setState();
   void setDirection();
