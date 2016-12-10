@@ -2,7 +2,8 @@
 
 #include "draw.h"
 
-void log_sdl_error(std::string msg) {
+void log_sdl_error(std::string msg)
+{
   std::cout << msg << " : " << SDL_GetError() << "\n";
 }
 
@@ -94,21 +95,19 @@ void Camera::center(int x, int y, int w, int h)
 
 void Camera::keepinbound()
 {
-  if (camera.x() < 0) {
+  if (camera.x() < 0)
     camera.setx(0);
-  }
-  if (camera.y() < 0) {
+  if (camera.y() < 0)
     camera.sety(0);
-  }
-  if (camera.x() > LEVEL_WIDTH - camera.width()) {
+
+  if (camera.x() > LEVEL_WIDTH - camera.width())
     camera.setx(LEVEL_WIDTH - camera.width());
-  }
-  if (camera.y() > LEVEL_HEIGHT - camera.height()) {
+  if (camera.y() > LEVEL_HEIGHT - camera.height())
     camera.sety(LEVEL_HEIGHT - camera.height());
-  }
 
 }
 
-bool Camera::intersects(Rect r) {
+bool Camera::intersects(Rect r)
+{
   return camera.intersects(r);
 }

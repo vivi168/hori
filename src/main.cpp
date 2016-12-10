@@ -18,9 +18,8 @@ int main(int argc, char **argv)
     bool quit = false;
     while (!quit) {
       while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
+        if (e.type == SDL_QUIT)
           quit = true;
-        }
         p.handleInput(e);
       }
 

@@ -86,13 +86,12 @@ void Player::setState()
     current_state = jumping;
 }
 
-void Player::setDirection() {
-  if (xv > 0) {
+void Player::setDirection()
+{
+  if (xv > 0)
     direction = right;
-  }
-  if (xv < 0) {
+  if (xv < 0)
     direction = left;
-  }
 }
 
 void Player::move()
