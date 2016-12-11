@@ -11,8 +11,8 @@
 const int SCREEN_WIDTH  = 512;
 const int SCREEN_HEIGHT = 448;
 
-const int LEVEL_WIDTH  = 1296;
-const int LEVEL_HEIGHT = 794;
+const int LEVEL_WIDTH  = 1280;
+const int LEVEL_HEIGHT = 800;
 
 const std::string TITLE = "hori";
 

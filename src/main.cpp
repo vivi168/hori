@@ -2,15 +2,19 @@
 
 #include "draw.h"
 #include "player.h"
-
+#include "map.h"
 int main(int argc, char **argv)
 {
   Window w;
   Image i;
   Image bg;
-
-  if (w.init() && i.init(w, "mario.png") && bg.init(w, "bg.png")) {
+  Image t;
+  if (w.init() &&
+      i.init(w, "mario.png") &&
+      bg.init(w, "bg.png") &&
+      t.init(w, "tiles.png")) {
     Camera camera;
+    Map map("map.txt", bg, t);
 
     Player p(i);
 
@@ -29,7 +33,9 @@ int main(int argc, char **argv)
       camera.keepinbound();
 
       SDL_RenderClear(w.renderer);
-      bg.drawClip(w, Rect(0,0,1296,794), 0-camera.x(), 0-camera.y());
+
+      map.draw(w, camera.x(), camera.y());
+
       p.draw(w, camera.x(), camera.y());
       SDL_RenderPresent(w.renderer);
     }
