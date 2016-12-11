@@ -96,15 +96,18 @@ void Player::setDirection()
 
 void Player::move()
 {
+  int txv = 0;
   if (current_state == jumping)
-    x += jv;
+    txv = jv;
   else
-    x += xv;
+    txv = xv;
+
+  x += txv;
   y += yv;
 
   // should also check if touches blocking tile
   if ((x < 0) || (x + SPRITEW > LEVEL_WIDTH)) {
-    x -= xv;
+    x -= txv;
   }
 
   // should also check if touches blocking tile
