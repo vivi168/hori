@@ -1,9 +1,9 @@
-#include "player.h"
+#include "unit.h"
 #include <iostream>
 
-Player::Player(Image s)
+Unit::Unit(Image s)
 {
-  x  = 0; y = 0;
+  x = 0; y = 0;
   xv = 0.0; yv = 0.0; jv = 0.0;
   onGround = 2;
 
@@ -19,34 +19,34 @@ Player::Player(Image s)
   initSprites();
 }
 
-void Player::initSprites()
+void Unit::initSprites()
 {
   sprites[left][idle] = {
-    Rect(SPRITEW*3,0,SPRITEW,SPRITEH)
+    Rect(SPRITEW * 3,0,SPRITEW,SPRITEH)
   };
   sprites[left][running] = {
-    Rect(SPRITEW*0,0,SPRITEW,SPRITEH),
-    Rect(SPRITEW*1,0,SPRITEW,SPRITEH),
-    Rect(SPRITEW*2,0,SPRITEW,SPRITEH)
+    Rect(SPRITEW * 0,0,SPRITEW,SPRITEH),
+    Rect(SPRITEW * 1,0,SPRITEW,SPRITEH),
+    Rect(SPRITEW * 2,0,SPRITEW,SPRITEH)
   };
   sprites[left][jumping] = {
-    Rect(SPRITEW*8,0,SPRITEW,SPRITEH)
+    Rect(SPRITEW * 8,0,SPRITEW,SPRITEH)
   };
 
   sprites[right][idle] = {
-    Rect(SPRITEW*4,0,SPRITEW,SPRITEH)
+    Rect(SPRITEW * 4,0,SPRITEW,SPRITEH)
   };
   sprites[right][running] = {
-    Rect(SPRITEW*5,0,SPRITEW,SPRITEH),
-    Rect(SPRITEW*6,0,SPRITEW,SPRITEH),
-    Rect(SPRITEW*7,0,SPRITEW,SPRITEH)
+    Rect(SPRITEW * 5,0,SPRITEW,SPRITEH),
+    Rect(SPRITEW * 6,0,SPRITEW,SPRITEH),
+    Rect(SPRITEW * 7,0,SPRITEW,SPRITEH)
   };
   sprites[right][jumping] = {
-    Rect(SPRITEW*9,0,SPRITEW,SPRITEH)
+    Rect(SPRITEW * 9,0,SPRITEW,SPRITEH)
   };
 }
 
-void Player::handleInput(SDL_Event &e)
+void Unit::handleInput(SDL_Event &e)
 {
   if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
     switch (e.key.keysym.sym) {
@@ -75,18 +75,18 @@ void Player::handleInput(SDL_Event &e)
   }
 }
 
-void Player::setState()
+void Unit::setState()
 {
   previous_state = current_state;
   if (xv == 0)
     current_state = idle;
   if (xv < 0 or xv > 0)
     current_state = running;
-  if(onGround > 0)
+  if (onGround > 0)
     current_state = jumping;
 }
 
-void Player::setDirection()
+void Unit::setDirection()
 {
   if (xv > 0)
     direction = right;
@@ -94,7 +94,7 @@ void Player::setDirection()
     direction = left;
 }
 
-void Player::move()
+void Unit::move()
 {
   int txv = 0;
   if (current_state == jumping)
@@ -112,17 +112,18 @@ void Player::move()
 
   // should also check if touches blocking tile
   if (y + SPRITEH > LEVEL_HEIGHT) {
-    y = LEVEL_HEIGHT-SPRITEH;
+    y = LEVEL_HEIGHT - SPRITEH;
     yv = 0;
     onGround = 0;
     jv = 0;
-  } else {
+  }
+  else {
     if (yv < YVEL)
       yv += GRAVITY;
   }
 }
 
-void Player::jump()
+void Unit::jump()
 {
   if (onGround < NBJUMP) {
     yv = -YVEL;
@@ -135,20 +136,20 @@ void Player::jump()
   }
 }
 
-Rect Player::nextSprite()
+Rect Unit::nextSprite()
 {
   if (previous_state != current_state)
     frame = 0;
   else {
-    frame ++;
+    frame++;
     if (frame >= sprites[direction][current_state].size())
-        frame = 0;
+      frame = 0;
   }
 
   return sprites[direction][current_state][frame];
 }
 
-void Player::selectSprite()
+void Unit::selectSprite()
 {
   next_animation = SDL_GetTicks();
   if (next_animation - last_animation > ANIMATION_SPEED or
@@ -160,7 +161,7 @@ void Player::selectSprite()
   }
 }
 
-void Player::update()
+void Unit::update()
 {
   setState();
   setDirection();
@@ -169,14 +170,19 @@ void Player::update()
   move();
 }
 
-void Player::draw(Window w)
+bool Unit::clicked(int a, int b)
+{
+  return a > x && a < (x + sprite.width()) &&
+    b > y && b < y + sprite.height();
+}
+
+void Unit::draw(Window w)
 {
   spritesheet.drawClip(w, sprite, x, y);
 }
 
 // relative to camera x,y
-void Player::draw(Window w, int cx, int cy)
+void Unit::draw(Window w, int cx, int cy)
 {
-  spritesheet.drawClip(w, sprite, x-cx, y-cy);
+  spritesheet.drawClip(w, sprite, x - cx, y - cy);
 }
-

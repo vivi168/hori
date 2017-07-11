@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "map.h"
+#include "tilemap.h"
 
 Tile::Tile()
 {
@@ -20,7 +20,7 @@ Tile::Tile(int x, int y, int f)
 int Tile::x() { return hitbox.x(); }
 int Tile::y() { return hitbox.y(); }
 
-Map::Map(std::string data_path, Image b, Image t)
+TileMap::TileMap(std::string data_path, Image b, Image t)
 {
   bg = b;
   tileset = t;
@@ -43,12 +43,12 @@ Map::Map(std::string data_path, Image b, Image t)
   }
 }
 
-void Map::draw(Window w, int cx, int cy)
+void TileMap::draw(Window w, int cx, int cy)
 {
-  bg.drawClip(w, Rect(0,0,1280,800), 0-cx, 0-cy);
-  for (int i = 0; i < tiles.size(); i ++) {
-    for (int j = 0; j < tiles[i].size(); j ++) {
-      tileset.drawClip(w, tiles[i][j].img, tiles[i][j].x()-cx, tiles[i][j].y()-cy);
+  bg.drawClip(w, Rect(0, 0, 1280, 800), 0 - cx, 0 - cy);
+  for (int i = 0; i < tiles.size(); i++) {
+    for (int j = 0; j < tiles[i].size(); j++) {
+      tileset.drawClip(w, tiles[i][j].img, tiles[i][j].x() - cx, tiles[i][j].y() - cy);
     }
   }
 }
